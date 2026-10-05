@@ -10,7 +10,17 @@ class ContentSummarizer:
         self.ai = ai_provider
 
     async def summarize(self, content: NormalizedContent) -> ContentSummary:
-        combined_text = content.raw_text or content.transcript or content.ocr_text or ""
+        content_parts = []
+        if content.raw_text:
+            content_parts.append(content.raw_text)
+        if content.transcript:
+            content_parts.append(content.transcript)
+        if content.ocr_text:
+            content_parts.append(content.ocr_text)
+
+        combined_text = "\n\n".join(content_parts).strip()
+        if not combined_text and content.title:
+            combined_text = content.title
         visual_info = content.visual_description
 
         if not combined_text and not visual_info:

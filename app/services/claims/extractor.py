@@ -15,22 +15,37 @@ class ClaimExtractor:
 
     async def extract_claims(self, content: NormalizedContent) -> Tuple[List[Claim], List[Claim]]:
         """
-        Extracts claims from content.
+        Extracts atomic claims from multimodal content.
         Returns:
             Tuple of (verifiable_factual_claims, non_verifiable_or_opinion_claims)
         """
-        full_text = content.raw_text or content.transcript or content.ocr_text or ""
-        if not full_text.strip():
-            logger.warning("No text to extract claims from.")
+        # Multimodal fusion: Aggregate body content (text, transcript, OCR overlays, visual scenes)
+        content_parts = []
+        if content.raw_text:
+            content_parts.append(content.raw_text)
+        if content.transcript:
+            content_parts.append(content.transcript)
+        if content.ocr_text:
+            content_parts.append(content.ocr_text)
+        if content.visual_description:
+            content_parts.append(content.visual_description)
+
+        full_context = "\n\n".join(content_parts).strip()
+        if not full_context and content.title:
+            full_context = content.title
+
+        if not full_context:
+            logger.warning("No extractable content found across all modalities.")
             return [], []
 
-        logger.info(f"Extracting claims from {content.url} ({len(full_text)} characters)...")
+        logger.info(f"Extracting claims from {content.url} ({len(full_context)} characters across modalities)...")
         all_claims = await self.ai.extract_claims(
-            text=full_text,
+            text=full_context,
             metadata={
                 "title": content.title,
                 "author": content.author,
                 "platform": content.platform.value,
+                "published_date": content.published_date,
             }
         )
 
@@ -42,6 +57,9 @@ class ClaimExtractor:
                 verifiable_claims.append(claim)
             else:
                 non_verifiable_claims.append(claim)
+
+        # Sort verifiable claims by importance score descending (core viral claims first)
+        verifiable_claims.sort(key=lambda c: c.importance_score, reverse=True)
 
         logger.info(
             f"Extracted {len(all_claims)} total claims: "
