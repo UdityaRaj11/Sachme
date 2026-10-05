@@ -1,4 +1,4 @@
-# TruthFirewall — AI-Powered Information Firewall
+# Sachme — AI-Powered Information Firewall
 
 An enterprise-grade, explainable AI information firewall backend that verifies online content in seconds. It accepts URLs from social media platforms, video networks, and news websites, understands and summarizes multimodal content, extracts factual claims, gathers evidence from tiered authoritative sources, evaluates credibility, and delivers explainable, evidence-grounded verification results.
 
@@ -6,7 +6,7 @@ An enterprise-grade, explainable AI information firewall backend that verifies o
 
 ## 🏛️ Architecture Overview
 
-TruthFirewall is architected as an asynchronous, modular microservice pipeline designed for high-throughput, low-latency epistemic verification.
+Sachme is architected as an asynchronous, modular microservice pipeline designed for high-throughput, low-latency epistemic verification.
 
 ```
 User / Client
