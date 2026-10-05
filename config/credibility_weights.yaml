@@ -1,0 +1,93 @@
+# Source Credibility Scoring Weights Configuration
+# These weights govern how the Source Credibility Engine computes 0-100 reliability scores.
+# Weights must sum to 1.0 (or are normalized dynamically).
+
+weights:
+  tier_weight: 0.35 # Baseline tier weight (Tier 1 vs Tier 2 vs Tier 3)
+  domain_reputation: 0.25 # Historical reputation & verification index of the domain
+  relevance: 0.15 # Semantic & entity match between claim and source snippet
+  primary_source_bonus: 0.10 # Is the source direct/first-party vs reporting hearsay
+  recency: 0.08 # Freshness and temporal proximity to events
+  corroboration: 0.07 # Agreement with other independent sources
+
+tier_base_scores:
+  tier_1_official: 90 # Government, official gazettes, regulatory bodies, primary scientific research
+  tier_2_high_credibility: 75 # Established wire agencies, top-tier newspapers, verified fact-checkers, universities
+  tier_3_general: 45 # General blogs, forums, social media, unverified news portals
+
+# Domain patterns and lists
+government_tlds:
+  - ".gov"
+  - ".gov.in"
+  - ".gov.uk"
+  - ".gov.au"
+  - ".gov.ca"
+  - ".gov.sg"
+  - ".nic.in"
+  - ".mil"
+  - ".europa.eu"
+  - ".who.int"
+  - ".un.org"
+
+academic_tlds:
+  - ".edu"
+  - ".ac.in"
+  - ".ac.uk"
+  - ".edu.au"
+
+known_authoritative_domains:
+  # International & Health / Scientific
+  who.int: 98
+  cdc.gov: 98
+  nih.gov: 98
+  fda.gov: 98
+  nasa.gov: 98
+  un.org: 95
+  nature.com: 96
+  sciencemag.org: 96
+  thelancet.com: 96
+  pib.gov.in: 95
+  rbi.org.in: 95
+  isro.gov.in: 95
+  whitehouse.gov: 95
+  gov.uk: 95
+
+known_fact_checkers:
+  snopes.com: 92
+  politifact.com: 92
+  factcheck.org: 92
+  reuters.com/fact-check: 94
+  apnews.com/hub/ap-fact-check: 94
+  afp.com/en/fact-check: 93
+  bbc.com/news/reality_check: 93
+  altnews.in: 90
+  boomlive.in: 90
+  vishvasnews.com: 88
+  fullfact.org: 91
+  leadstories.com: 89
+
+known_reputable_news:
+  reuters.com: 94
+  apnews.com: 94
+  afp.com: 93
+  bbc.com: 92
+  bbc.co.uk: 92
+  thehindu.com: 88
+  indianexpress.com: 87
+  hindustantimes.com: 87
+  nytimes.com: 90
+  washingtonpost.com: 89
+  wsj.com: 90
+  bloomberg.com: 91
+  ft.com: 91
+  theguardian.com: 88
+  economist.com: 90
+  dw.com: 89
+  france24.com: 88
+
+unreliable_or_satire_domains:
+  theonion.com: 10
+  babylonbee.com: 10
+  fakingnews.com: 10
+  infowars.com: 15
+  worldnewsdailyreport.com: 5
